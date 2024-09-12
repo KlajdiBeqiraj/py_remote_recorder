@@ -22,3 +22,7 @@ pyngrok = "^7.2.0"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+
+[tool.poetry.scripts]
+pyrecorder = "py_remote_recorder.__main__:main"
