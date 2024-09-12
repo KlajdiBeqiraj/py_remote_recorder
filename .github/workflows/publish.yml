@@ -1,0 +1,82 @@
+name: Publish Python Package
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: List available Python versions
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3
+          python3 --version
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install Poetry and bump2version
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          export PATH="$HOME/.local/bin:$PATH"
+          poetry install
+          poetry add --dev bump2version
+
+      - name: Commit changes
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
+
+          git add pyproject.toml poetry.lock
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Update dependencies"
+          fi
+
+      - name: Bump version
+        run: |
+          poetry run bump2version patch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build package
+        run: poetry build
+
+
+      - name: Publish package to PyPI
+        env:
+          TWINE_TOKEN: ${{ secrets.TWINE_TOKEN }}
+        run: |
+          echo ${{ secrets.TWINE_TOKEN }}
+          poetry publish --username __token__ --password ${{ secrets.TWINE_TOKEN }}
+      - name: Push changes and tags
+        run: |
+          git push origin main --tags
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: 'v${{ github.run_number }}'
+          release_name: 'Release ${{ github.run_number }}'
+          draft: false
+          prerelease: false

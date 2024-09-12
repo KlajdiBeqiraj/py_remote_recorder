@@ -1,49 +1,95 @@
-import mss
+"""
+This module provides functions for screen recording using OpenCV and MSS,
+allowing recording of a specific screen and saving the output as a video file.
+"""
+
 import cv2
+import mss
 import numpy as np
 from screeninfo import get_monitors
 
-# Global variable to stop recording
+# Global flag to signal when to stop the screen recording
 stop_recording_flag = False
 
 
-# Function to record the screen
 def record_screen(screen, output_file="output.avi", fps=20):
+    """
+    Function to record the selected screen and save it to a video file.
+
+    Args:
+        screen: The screen object containing position and dimensions.
+        output_file (str): The path to the output video file (default: 'output.avi').
+        fps (int): Frames per second for the video recording (default: 20).
+    """
     global stop_recording_flag
-    monitor = {"top": screen.y, "left": screen.x, "width": screen.width, "height": screen.height}
+
+    # Define the monitor area to capture based on screen properties
+    monitor = {
+        "top": screen.y,
+        "left": screen.x,
+        "width": screen.width,
+        "height": screen.height,
+    }
 
     with mss.mss() as sct:
+        # Set up video writer with XVID codec
         fourcc = cv2.VideoWriter_fourcc(*"XVID")
         out = cv2.VideoWriter(output_file, fourcc, fps, (screen.width, screen.height))
 
         try:
             while not stop_recording_flag:
-                img = np.array(sct.grab(monitor))  # Capture the screen
-                img_bgr = cv2.cvtColor(img, cv2.COLOR_BGRA2BGR)  # Convert to BGR format for OpenCV
-                out.write(img_bgr)  # Write the frame to the file
+                # Capture the screen and convert it to a NumPy array
+                img = np.array(sct.grab(monitor))
+
+                # Convert the captured image to BGR format for OpenCV
+                img_bgr = cv2.cvtColor(img, cv2.COLOR_BGRA2BGR)
+
+                # Write the BGR frame to the video file
+                out.write(img_bgr)
+
+                # Display the recording in a window
                 cv2.imshow("Screen Recording", img_bgr)
 
-                if cv2.waitKey(1) & 0xFF == ord('q'):  # Press 'q' to exit (optional)
+                # Optional: Press 'q' to stop recording manually
+                if cv2.waitKey(1) & 0xFF == ord("q"):
                     break
         finally:
-            out.release()  # Release the video file
+            # Release the video writer and close the OpenCV window
+            out.release()
             cv2.destroyAllWindows()
 
 
-# Function to start screen recording in a separate thread
 def start_screen_recording(screen_index: int, output_file="output.avi"):
-    global stop_recording_flag
-    stop_recording_flag = False  # Reset stop flag
+    """
+    Start screen recording for a specific screen index in a separate thread.
 
-    screens = get_monitors()  # Get all available screens
+    Args:
+        screen_index (int): The index of the screen to record (1-based index).
+        output_file (str): The path to the output video file (default: 'output.avi').
+
+    Raises:
+        ValueError: If the screen index is invalid.
+    """
+    global stop_recording_flag
+    stop_recording_flag = False  # Reset stop flag before starting
+
+    # Get all available monitors
+    screens = get_monitors()
+
+    # Validate the screen index
     if screen_index < 1 or screen_index > len(screens):
         raise ValueError("Invalid screen index")
 
-    selected_screen = screens[screen_index - 1]  # Select the screen by index
+    # Select the screen based on the provided index
+    selected_screen = screens[screen_index - 1]
+
+    # Start the recording process for the selected screen
     record_screen(selected_screen, output_file=output_file)
 
 
-# Function to stop screen recording
 def stop_screen_recording():
+    """
+    Function to stop the screen recording by setting the stop flag.
+    """
     global stop_recording_flag
-    stop_recording_flag = True
+    stop_recording_flag = True  # Set stop flag to True to break the recording loop

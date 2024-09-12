@@ -1,64 +1,114 @@
-import requests
-import time
+"""
+This module provides functions to interact with remote APIs for starting/stopping
+screen and audio recordings, and saving the binary data to files.
+"""
+
 import os
 
-from record_screen_apis.utils import get_logger
+import requests
+
+from py_remote_recorder.utils import get_logger
 
 logger = get_logger()
 
-# Function to start screen recording
+
 def start_video_recording(end_point: str, screen_index: int):
-    url = end_point + "/start-screen-recording/"
+    """
+    Sends a POST request to start screen recording.
+
+    Args:
+        end_point (str): The endpoint URL of the recording server.
+        screen_index (int): The index of the screen to record.
+
+    Returns:
+        None
+    """
+    url = f"{end_point}/start-screen-recording/"
     payload = {"screen_index": screen_index}
 
     # Send the POST request to start recording
     response = requests.post(url, json=payload)
 
-    # Print the response
+    # Log the response
     if response.status_code == 200:
-        logger.info(f"Recording started: {response.json()}")
+        logger.info("Recording started: %s", response.json())
     else:
-        logger.error(f"Failed to start recording: {response.status_code}, {response.text}")
+        logger.error(
+            "Failed to start recording: %d, %s", response.status_code, response.text
+        )
 
 
 def stop_video_recording(end_point: str):
-    url = end_point + "/stop-screen-recording/"
+    """
+    Sends a POST request to stop screen recording and returns the video data.
+
+    Args:
+        end_point (str): The endpoint URL of the recording server.
+
+    Returns:
+        bytes: The binary video data, or None if the request failed.
+    """
+    url = f"{end_point}/stop-screen-recording/"
 
     # Send the POST request to stop recording
     response = requests.post(url, stream=True)
 
     # Check if the request was successful
     if response.status_code == 200:
-        # Collect the video data in chunks and return it
         video_data = b""  # Initialize an empty byte string
         for chunk in response.iter_content(chunk_size=1024):
             if chunk:
                 video_data += chunk  # Accumulate the chunks into the byte string
         logger.info("Recording stopped and video data collected.")
         return video_data  # Return the video data as byte array
-    else:
-        logger.error(f"Failed to stop recording: {response.status_code}, {response.text}")
-        return None
+    logger.error(
+        "Failed to stop recording: %d, %s", response.status_code, response.text
+    )
+    return None
 
 
-# Function to start audio recording
 def start_audio_recording(end_point: str):
+    """
+    Sends a POST request to start audio recording.
+
+    Args:
+        end_point (str): The endpoint URL of the recording server.
+
+    Returns:
+        None
+    """
     url = f"{end_point}/start-audio-recording/"
 
+    # Send the POST request to start recording
     response = requests.post(url)
 
+    # Log the response
     if response.status_code == 200:
-        logger.info(f"Audio recording started: {response.json()}")
+        logger.info("Audio recording started: %s", response.json())
     else:
-        logger.error(f"Failed to start audio recording: {response.status_code}, {response.text}")
+        logger.error(
+            "Failed to start audio recording: %d, %s",
+            response.status_code,
+            response.text,
+        )
 
 
-# Function to stop audio recording and retrieve the binary data
 def stop_audio_recording(end_point: str):
+    """
+    Sends a POST request to stop audio recording and returns the audio data.
+
+    Args:
+        end_point (str): The endpoint URL of the recording server.
+
+    Returns:
+        bytes: The binary audio data, or None if the request failed.
+    """
     url = f"{end_point}/stop-audio-recording/"
 
+    # Send the POST request to stop recording
     response = requests.post(url, stream=True)
 
+    # Check if the request was successful
     if response.status_code == 200:
         audio_data = b""  # Initialize an empty byte string
         for chunk in response.iter_content(chunk_size=1024):
@@ -66,15 +116,26 @@ def stop_audio_recording(end_point: str):
                 audio_data += chunk  # Accumulate the chunks into the byte string
         logger.info("Audio recording stopped and data collected.")
         return audio_data  # Return the binary audio data
-    else:
-        logger.error(f"Failed to stop audio recording: {response.status_code}, {response.text}")
-        return None
+    logger.error(
+        "Failed to stop audio recording: %d, %s", response.status_code, response.text
+    )
+    return None
 
 
-def save_binary_file(video_data, output_file):
+def save_binary_file(data: bytes, output_file: str):
+    """
+    Saves binary data to a file.
+
+    Args:
+        data (bytes): The binary data to save.
+        output_file (str): The path to the output file.
+
+    Returns:
+        None
+    """
     try:
-        with open(output_file, 'wb') as file:
-            file.write(video_data)
-        logger.info(f"Save file {os.path.abspath(output_file)}")
-    except Exception as e:
-        logger.error(f"Saving error: {e}")
+        with open(output_file, "wb") as file:
+            file.write(data)
+        logger.info("File saved: %s", os.path.abspath(output_file))
+    except Exception as error:  # pylint: disable=broad-except
+        logger.error("Error saving file: %s", error)

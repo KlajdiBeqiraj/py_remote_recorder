@@ -1,7 +1,17 @@
+"""
+Unit tests for video recording functionality in py_remote_recorder.
+"""
+
+# Rest of test_video_part.py
+
 # Example usage
 import time
 
-from py_remote_recorder.backend.call_apis import start_video_recording, stop_video_recording, save_binary_file
+from py_remote_recorder.backend.call_apis import (
+    save_binary_file,
+    start_video_recording,
+    stop_video_recording,
+)
 
 if __name__ == "__main__":
     current_end_point = "https://9c9d-93-62-248-214.ngrok-free.app"
