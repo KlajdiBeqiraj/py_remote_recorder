@@ -12,7 +12,7 @@ with open("README.md", encoding="utf-8") as f:
 
 setup(
     name="py_remote_recorder",
-    version="0.0.1",
+    version="0.0.2",
     description="py_remote_recorder is a Python package for recording screens and audio remotely via API.",
     long_description=long_description,
     long_description_content_type="text/markdown",
