@@ -28,6 +28,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Install PortAudio dependencies
+        run: sudo apt-get install -y portaudio19-dev
+
       - name: Install Poetry and bump2version
         run: |
           curl -sSL https://install.python-poetry.org | python3 -
