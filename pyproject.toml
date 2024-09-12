@@ -9,14 +9,14 @@ readme = "README.md"
 python = "^3.10"
 pre-commit = "^3.8.0"
 uvicorn = "^0.30.6"
-fastapi = "^0.114.1"
-pydantic = "^2.9.1"
+fastapi = "^0.88.0"
 pyaudio = "^0.2.14"
 opencv-python = "^4.10.0.84"
 mss = "^9.0.2"
 pyautogui = "^0.9.54"
 screeninfo = "^0.8.1"
 pyngrok = "^7.2.0"
+pydantic = "<2.0.0"
 
 
 [tool.poetry.group.dev.dependencies]
