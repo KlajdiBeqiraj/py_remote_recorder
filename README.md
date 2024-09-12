@@ -1,7 +1,6 @@
 
-# PyRemoteRecorder
-
-![PYSwaggerAPIWrap Logo](https://raw.githubusercontent.com/KlajdiBeqiraj/py_remote_recorder/main/resources/py_remote_recorder_logo.ico) <!-- Replace with the URL of your preferred image -->
+# PyRemoteRecorder 
+<img src="https://github.com/KlajdiBeqiraj/py_remote_recorder/blob/main/resources/py_remote_recorder_logo.webp" alt="Image description" width="200" height="200">
 
 
 `py_remote_recorder` is a Python package designed for remote screen and audio recording via API calls. It provides functionalities to start and stop screen and audio recordings on a specific monitor or input device, along with saving the recordings locally as video or audio files. This package is ideal for remote monitoring, screen capturing, and voice recording applications, with support for FastAPI-based backends and integration with frontend applications via API calls.
