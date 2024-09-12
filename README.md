@@ -28,7 +28,8 @@ Alternatively, you can install it directly from the source:
 ```bash
 git clone https://github.com/your-repo/py_remote_recorder.git
 cd py_remote_recorder
-pip install .
+pip install poetry 
+poetry install
 ```
 
 ## Usage
@@ -157,7 +158,12 @@ if audio_data:
 
 ## Ngrok Integration
 
-If you want to access the API remotely, you can use the `--use-ngrok` flag to expose the local FastAPI server. For example:
+1. Download Ngrok from the official website:
+https://ngrok.com/download
+
+2. Extract the downloaded file to a folder where you have write permissions (e.g., C:\ngrok on Windows).
+
+3. If you want to access the API remotely, you can use the `--use-ngrok` flag to expose the local FastAPI server. For example:
 
 ```bash
 python -m py_remote_recorder --use-ngrok --port 8000
