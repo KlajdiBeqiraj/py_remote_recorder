@@ -37,6 +37,7 @@ logger = get_logger()
 # Model to accept screen selection
 class ScreenSelection(BaseModel):
     """Model to capture the screen index selection."""
+
     screen_index: int
 
 
@@ -107,7 +108,7 @@ def stop_screen_recording_api():
             media_type="video/x-msvideo",
             headers={
                 "Content-Disposition": f"attachment; "
-                                       f"filename={os.path.basename(screen_output_file)}"
+                f"filename={os.path.basename(screen_output_file)}"
             },
         )
     return {"status": "No recording found or recording was not started properly."}
@@ -156,12 +157,10 @@ def stop_audio_recording_api():
             media_type="audio/wav",
             headers={
                 "Content-Disposition": f"attachment; "
-                                       f"filename={os.path.basename(audio_output_file)}"
+                f"filename={os.path.basename(audio_output_file)}"
             },
         )
-    return {
-        "status": "No audio recording found or recording was not started properly."
-    }
+    return {"status": "No audio recording found or recording was not started properly."}
 
 
 def start_ngrok(ngrok_port):
@@ -219,6 +218,10 @@ def log_ngrok_root(public_url):
 
 
 def main():
+    """
+    Main function, run apis
+    :return:
+    """
     # Parse command-line arguments
     args = parse_args()
     server_port = args.port

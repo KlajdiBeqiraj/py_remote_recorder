@@ -1,5 +1,5 @@
 
-# PyRemoteRecorder 
+# PyRemoteRecorder
 <img src="https://github.com/KlajdiBeqiraj/py_remote_recorder/blob/main/resources/py_remote_recorder_logo.webp" alt="Image description" width="200" height="200">
 
 
@@ -29,7 +29,7 @@ Alternatively, you can install it directly from the source:
 ```bash
 git clone https://github.com/your-repo/py_remote_recorder.git
 cd py_remote_recorder
-pip install poetry 
+pip install poetry
 poetry install
 ```
 
@@ -208,5 +208,3 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 ## Contact
 
 For any inquiries or issues, please contact the maintainer via email or open an issue on GitHub.
-
-
