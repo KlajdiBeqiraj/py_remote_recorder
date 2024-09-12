@@ -20,6 +20,7 @@
 You can install the `py_remote_recorder` package via pip:
 
 ```bash
+conda install -c anaconda pyaudio
 pip install py_remote_recorder
 ```
 
@@ -39,7 +40,7 @@ poetry install
 First, you'll need to set up and run the FastAPI server provided by the package. The server exposes API endpoints for starting and stopping screen/audio recordings.
 
 ```bash
-python -m py_remote_recorder
+pyrecorder
 ```
 
 You can start the server with optional arguments:
@@ -166,7 +167,7 @@ https://ngrok.com/download
 3. If you want to access the API remotely, you can use the `--use-ngrok` flag to expose the local FastAPI server. For example:
 
 ```bash
-python -m py_remote_recorder --use-ngrok --port 8000
+pyrecorder --use-ngrok --port 8000
 ```
 
 The public Ngrok URL will be logged in the terminal, allowing you to interact with the API remotely.
