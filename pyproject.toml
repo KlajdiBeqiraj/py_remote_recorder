@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "py_remote_recorder"
-version = "0.0.6"
+version = "0.0.7"
 description = ""
 authors = ["KlajdiBeqiraj <k.beqiraj@myw.ai>"]
 readme = "README.md"
