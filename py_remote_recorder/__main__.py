@@ -13,7 +13,7 @@ import time
 import requests
 import uvicorn
 from fastapi import FastAPI
-from fastapi.responses import StreamingResponse
+from fastapi.responses import FileResponse, StreamingResponse
 from pydantic import BaseModel
 
 from py_remote_recorder.backend.audio_record_functions import (
@@ -56,7 +56,7 @@ def start_screen_recording_api(selection: ScreenSelection):
     global screen_output_file
     try:
         # Generate the output file name based on screen index
-        screen_output_file = f"output_screen_{selection.screen_index}.avi"
+        screen_output_file = f"output_screen_{selection.screen_index}.mp4"
 
         # Run the recording in a separate thread to avoid blocking the API
         threading.Thread(
@@ -93,24 +93,23 @@ def iter_file(file_path, chunk_size=1024 * 1024):
 @app.post("/stop-screen-recording/")
 def stop_screen_recording_api():
     """
-    Stop the screen recording and stream the recorded file.
+    Stop the screen recording and stream the recorded MP4 file.
 
     Returns:
-        StreamingResponse: The recorded video file or error message.
+        FileResponse: The recorded video file or an error message if not found.
     """
     global screen_output_file
     stop_screen_recording()  # Stop the recording process
 
-    # Check if the file exists before streaming it
+    # Ensure the file is fully written and closed
     if screen_output_file and os.path.exists(screen_output_file):
-        return StreamingResponse(
-            iter_file(screen_output_file),
-            media_type="video/x-msvideo",
-            headers={
-                "Content-Disposition": f"attachment; "
-                f"filename={os.path.basename(screen_output_file)}"
-            },
+        # Stream the MP4 file to the client
+        return FileResponse(
+            screen_output_file,
+            media_type="video/mp4",  # Correct MIME type for MP4
+            filename=os.path.basename(screen_output_file),
         )
+
     return {"status": "No recording found or recording was not started properly."}
 
 

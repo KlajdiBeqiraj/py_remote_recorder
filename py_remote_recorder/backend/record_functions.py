@@ -1,6 +1,5 @@
 """
-This module provides functions for screen recording using OpenCV and MSS,
-allowing recording of a specific screen and saving the output as a video file.
+recording functions
 """
 
 import cv2
@@ -12,13 +11,13 @@ from screeninfo import get_monitors
 stop_recording_flag = False
 
 
-def record_screen(screen, output_file="output.avi", fps=20):
+def record_screen(screen, output_file="output.mp4", fps=20):
     """
     Function to record the selected screen and save it to a video file.
 
     Args:
         screen: The screen object containing position and dimensions.
-        output_file (str): The path to the output video file (default: 'output.avi').
+        output_file (str): The path to the output video file (default: 'output.mp4').
         fps (int): Frames per second for the video recording (default: 20).
     """
     global stop_recording_flag
@@ -32,8 +31,8 @@ def record_screen(screen, output_file="output.avi", fps=20):
     }
 
     with mss.mss() as sct:
-        # Set up video writer with XVID codec
-        fourcc = cv2.VideoWriter_fourcc(*"XVID")
+        # Set up video writer with the MP4 codec (H.264)
+        fourcc = cv2.VideoWriter_fourcc(*"mp4v")  # More compatible codec
         out = cv2.VideoWriter(output_file, fourcc, fps, (screen.width, screen.height))
 
         try:
@@ -47,7 +46,7 @@ def record_screen(screen, output_file="output.avi", fps=20):
                 # Write the BGR frame to the video file
                 out.write(img_bgr)
 
-                # Display the recording in a window
+                # Display the recording in a window (optional)
                 cv2.imshow("Screen Recording", img_bgr)
 
                 # Optional: Press 'q' to stop recording manually
@@ -59,13 +58,13 @@ def record_screen(screen, output_file="output.avi", fps=20):
             cv2.destroyAllWindows()
 
 
-def start_screen_recording(screen_index: int, output_file="output.avi"):
+def start_screen_recording(screen_index: int, output_file="output.mp4"):
     """
-    Start screen recording for a specific screen index in a separate thread.
+    Start screen recording for a specific screen index.
 
     Args:
         screen_index (int): The index of the screen to record (1-based index).
-        output_file (str): The path to the output video file (default: 'output.avi').
+        output_file (str): The path to the output video file (default: 'output.mp4').
 
     Raises:
         ValueError: If the screen index is invalid.

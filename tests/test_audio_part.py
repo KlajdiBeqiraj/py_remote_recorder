@@ -14,7 +14,7 @@ from py_remote_recorder.backend.call_apis import (
 )
 
 if __name__ == "__main__":
-    current_end_point = "https://3891-93-62-248-214.ngrok-free.app"
+    current_end_point = "http://0.0.0.0:8000"
 
     # Start the audio recording
     start_audio_recording(end_point=current_end_point)

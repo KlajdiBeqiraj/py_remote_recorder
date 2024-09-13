@@ -87,6 +87,10 @@ def start_screen_recording(screen_index: int, output_file="output.avi"):
 def stop_screen_recording():
     """
     Function to stop the screen recording by setting the stop flag.
+    Ensure that the file is fully written and closed before proceeding.
     """
     global stop_recording_flag
     stop_recording_flag = True  # Set stop flag to True to break the recording loop
+
+    # Ensure the recording process has completely stopped and the file is closed
+    time.sleep(1)  # Add a short delay to ensure file writing completes
