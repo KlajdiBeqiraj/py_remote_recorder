@@ -32,7 +32,7 @@ def record_screen(screen, output_file="output.mp4", fps=20):
 
     with mss.mss() as sct:
         # Set up video writer with the MP4 codec (H.264)
-        fourcc = cv2.VideoWriter_fourcc(*"mp4v")  # More compatible codec
+        fourcc = cv2.VideoWriter_fourcc(*"avc1")  # More compatible codec
         out = cv2.VideoWriter(output_file, fourcc, fps, (screen.width, screen.height))
 
         try:
