@@ -33,8 +33,8 @@ def record_screen(screen, output_file="output.avi", fps=20):
     }
 
     with mss.mss() as sct:
-        # Set up the video writer with the XVID codec
-        fourcc = cv2.VideoWriter_fourcc(*"XVID")
+        # Set up the video writer with the avc1 codec
+        fourcc = cv2.VideoWriter_fourcc(*"avc1")
         out = cv2.VideoWriter(output_file, fourcc, fps, (screen.width, screen.height))
 
         try:
