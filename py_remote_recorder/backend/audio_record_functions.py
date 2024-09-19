@@ -2,14 +2,12 @@
 This module provides functions for recording audio and stopping the recording process.
 """
 
+import time
 import wave
 
 import pyaudio
 
-import time
-
 from py_remote_recorder.utils import get_logger
-
 
 # Global flag to signal when to stop the audio recording
 stop_audio_recording_flag = False
@@ -74,6 +72,6 @@ def stop_audio_recording():
     """
     global stop_audio_recording_flag
     # Set the stop flag to True to break the recording loop
-    stop_audio_recording_flag = True 
+    stop_audio_recording_flag = True
     # Ensure the recording process has completely stopped and the file is closed
     time.sleep(1)  # Add a short delay to ensure file writing completes
