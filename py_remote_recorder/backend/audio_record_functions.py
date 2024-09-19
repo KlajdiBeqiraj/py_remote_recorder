@@ -6,7 +6,10 @@ import wave
 
 import pyaudio
 
+import time
+
 from py_remote_recorder.utils import get_logger
+
 
 # Global flag to signal when to stop the audio recording
 stop_audio_recording_flag = False
@@ -14,7 +17,7 @@ stop_audio_recording_flag = False
 # Parameters for audio recording
 AUDIO_FORMAT = pyaudio.paInt16
 CHANNELS = 2
-RATE = 44100
+RATE = 48000
 CHUNK = 1024
 
 logger = get_logger()
@@ -28,6 +31,7 @@ def record_audio(output_file="output_audio.wav"):
         output_file (str): The path to the output .wav file (default: 'output_audio.wav').
     """
     global stop_audio_recording_flag
+    stop_audio_recording_flag = False  # Reset the flag at the beginning
 
     # Initialize PyAudio instance
     audio_interface = pyaudio.PyAudio()
@@ -49,7 +53,6 @@ def record_audio(output_file="output_audio.wav"):
     while not stop_audio_recording_flag:
         data = stream.read(CHUNK)
         frames.append(data)
-
     # Stop and close the stream
     stream.stop_stream()
     stream.close()
@@ -70,6 +73,7 @@ def stop_audio_recording():
     Function to stop the audio recording by setting the stop flag.
     """
     global stop_audio_recording_flag
-    stop_audio_recording_flag = (
-        True  # Set the stop flag to True to break the recording loop
-    )
+    # Set the stop flag to True to break the recording loop
+    stop_audio_recording_flag = True 
+    # Ensure the recording process has completely stopped and the file is closed
+    time.sleep(1)  # Add a short delay to ensure file writing completes
