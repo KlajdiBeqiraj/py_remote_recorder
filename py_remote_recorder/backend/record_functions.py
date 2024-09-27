@@ -11,7 +11,7 @@ from screeninfo import get_monitors
 stop_recording_flag = False
 
 
-def record_screen(screen, output_file="output.mp4", fps=20):
+def record_screen(screen, output_file="output.mp4", fps=10):
     """
     Function to record the selected screen and save it to a video file.
 
@@ -58,7 +58,7 @@ def record_screen(screen, output_file="output.mp4", fps=20):
             cv2.destroyAllWindows()
 
 
-def start_screen_recording(screen_index: int, output_file="output.mp4"):
+def start_screen_recording(screen_index: int, output_file="output.mp4", fps=10):
     """
     Start screen recording for a specific screen index.
 
@@ -83,7 +83,7 @@ def start_screen_recording(screen_index: int, output_file="output.mp4"):
     selected_screen = screens[screen_index - 1]
 
     # Start the recording process for the selected screen
-    record_screen(selected_screen, output_file=output_file)
+    record_screen(selected_screen, output_file=output_file, fps=fps)
 
 
 def stop_screen_recording():

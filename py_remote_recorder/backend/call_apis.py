@@ -12,7 +12,7 @@ from py_remote_recorder.utils import get_logger
 logger = get_logger()
 
 
-def start_video_recording(end_point: str, screen_index: int):
+def start_video_recording(end_point: str, screen_index: int, fps: int):
     """
     Sends a POST request to start screen recording.
 
@@ -24,7 +24,7 @@ def start_video_recording(end_point: str, screen_index: int):
         None
     """
     url = f"{end_point}/start-screen-recording/"
-    payload = {"screen_index": screen_index}
+    payload = {"screen_index": screen_index, "fps": fps}
 
     # Send the POST request to start recording
     response = requests.post(url, json=payload)
