@@ -17,7 +17,7 @@ if __name__ == "__main__":
     current_end_point = "http://192.168.1.9:8000"
 
     # Start the recording on screen 1
-    start_video_recording(end_point=current_end_point, screen_index=2)
+    start_video_recording(end_point=current_end_point, screen_index=2, fps=10)
 
     time.sleep(3)
 
