@@ -16,7 +16,7 @@ stop_recording_flag = False
 pyautogui.FAILSAFE = False  # Disable PyAutoGUI failsafe
 
 
-def record_screen(screen, output_file="output.avi", fps=20):
+def record_screen(screen, output_file="output.avi", fps=10):
     """
     Record the selected screen and save the recording to a video file.
 
@@ -33,7 +33,7 @@ def record_screen(screen, output_file="output.avi", fps=20):
     }
 
     with mss.mss() as sct:
-        # Set up the video writer with the avc1 codec
+        # Set up the video writer with the XVID codec
         fourcc = cv2.VideoWriter_fourcc(*"avc1")
         out = cv2.VideoWriter(output_file, fourcc, fps, (screen.width, screen.height))
 
@@ -56,7 +56,7 @@ def record_screen(screen, output_file="output.avi", fps=20):
             cv2.destroyAllWindows()
 
 
-def start_screen_recording(screen_index: int, output_file="output.avi"):
+def start_screen_recording(screen_index: int, output_file="output.avi", fps=10):
     """
     Start screen recording for the specified screen index.
 
@@ -81,7 +81,7 @@ def start_screen_recording(screen_index: int, output_file="output.avi"):
     selected_screen = screens[screen_index - 1]
 
     # Start recording the selected screen
-    record_screen(selected_screen, output_file=output_file)
+    record_screen(selected_screen, output_file=output_file, fps=fps)
 
 
 def stop_screen_recording():
